@@ -15,7 +15,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 120vh;
             margin: 0;
         }
 
@@ -31,7 +31,7 @@
             display: block;
             margin-bottom: 10px;
         }
-
+        select,
         input[type="text"],
         input[type="email"],
         input[type="tel"],
@@ -91,6 +91,16 @@
             <label for="age">Age:</label>
             <input type="number" id="age" name="age" min="18" max="120" required>
             <span id="ageError" class="error"></span>
+        </div>
+        <div>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" required>
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+            <span id="genderError" class="error"></span>
         </div>
         <div>
             <label for="email">Email:</label>
@@ -166,6 +176,23 @@
             var confirmPasswordError = document.getElementById("confirmPasswordError");
             var errorElement = document.getElementById("error");
             var isValid = true;
+
+            var age = document.getElementById("age").value;
+            var ageError = document.getElementById("ageError");
+            if (age < 18 || age > 120 || isNaN(age)) {
+                ageError.innerHTML = "Invalid Age (must be between 18 and 120)";
+                isValid = false;
+            } else {
+                ageError.innerHTML = "";
+            }
+            var gender = document.getElementById("gender").value;
+            var genderError = document.getElementById("genderError");
+            if (gender === "") {
+                genderError.innerHTML = "Please select your gender";
+                isValid = false;
+            } else {
+                genderError.innerHTML = "";
+            }
 
             // Reset error messages
             firstnameError.innerHTML = "";
