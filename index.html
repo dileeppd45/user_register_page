@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration Form with Validation Patterns and OTP</title>
+    <style>
+        .error {
+            color: red;
+        }
+         body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        form {
+            background-color: #ffffff;
+            padding: 60px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="password"]{
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="button"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        input[type="button"]:hover {
+            background-color: #45a049;
+        }
+
+        button[type="button"] {
+            background-color: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="button"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form id="registrationForm">
+        <h2>User Registration Form</h2>
+        <div>
+            <label for="firstname">First Name:</label>
+            <input type="text" id="firstname" name="firstname" pattern="[A-Za-z]{1,32}" required>
+            <span id="firstnameError" class="error"></span>
+        </div>
+        <div>
+            <label for="lastname">Last Name:</label>
+            <input type="text" id="lastname" name="lastname" pattern="[A-Za-z]{1,32}" required>
+            <span id="lastnameError" class="error"></span>
+        </div>
+        <div>
+            <label for="age">Age:</label>
+            <input type="number" id="age" name="age" min="18" max="120" required>
+            <span id="ageError" class="error"></span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <span id="emailError" class="error"></span>
+        </div>
+        <div>
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required>
+            <span id="phoneError" class="error"></span>
+            <br>
+            <button type="button" onclick="sendOTP()">Send OTP</button>
+        </div>
+
+        <div style="padding-top:10px;">
+            <label for="otp" >OTP:</label>
+            <input type="text" id="otp" name="otp" pattern="[0-9]{4}" required>
+            <span id="otpError" class="error"></span>
+        </div>
+        <div>
+            <label for="password">Password (at least 8 characters, one uppercase, one lowercase, one number):</label>
+            <input type="password" id="password" name="password" pattern="^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$" required>
+            <span id="passwordError" class="error"></span>
+        </div>
+        <div>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+            <span id="confirmPasswordError" class="error"></span>
+        </div>
+        <div id="error" class="error"></div>
+        <div>
+            <button type="button" onclick="validateForm()">Register</button>
+        </div>
+    </form>
+
+    <script>
+        var generatedOTP = "";
+
+        function generateOTP() {
+            generatedOTP = "";
+            var digits = '0123456789';
+            for (let i = 0; i < 4; i++) {
+                generatedOTP += digits[Math.floor(Math.random() * 10)];
+            }
+        }
+
+        function sendOTP() {
+            generateOTP();
+            var phone = document.getElementById("phone").value;
+            phoneError.innerHTML = "";
+            // Validate Phone Number
+            if (!/^[0-9]{10}$/.test(phone)) {
+                phoneError.innerHTML = "Invalid Phone Number";
+                isValid = false;
+            }
+            //alert("OTP sent to your phone number: " + generatedOTP);
+        }
+
+        function validateForm() {
+            var firstname = document.getElementById("firstname").value;
+            var lastname = document.getElementById("lastname").value;
+            var email = document.getElementById("email").value;
+            var phone = document.getElementById("phone").value;
+            var otp = document.getElementById("otp").value;
+            var password = document.getElementById("password").value;
+            var confirmPassword = document.getElementById("confirmPassword").value;
+            var firstnameError = document.getElementById("firstnameError");
+            var lastnameError = document.getElementById("lastnameError");
+            var emailError = document.getElementById("emailError");
+            var phoneError = document.getElementById("phoneError");
+            var otpError = document.getElementById("otpError");
+            var passwordError = document.getElementById("passwordError");
+            var confirmPasswordError = document.getElementById("confirmPasswordError");
+            var errorElement = document.getElementById("error");
+            var isValid = true;
+
+            // Reset error messages
+            firstnameError.innerHTML = "";
+            lastnameError.innerHTML = "";
+            emailError.innerHTML = "";
+            phoneError.innerHTML = "";
+            otpError.innerHTML = "";
+            passwordError.innerHTML = "";
+            confirmPasswordError.innerHTML = "";
+            errorElement.innerHTML = "";
+
+            // Validate First Name
+            if (!/^[A-Za-z]{1,32}$/.test(firstname)) {
+                firstnameError.innerHTML = "Invalid First Name";
+                isValid = false;
+            }
+
+            // Validate Last Name
+            if (!/^[A-Za-z]{1,32}$/.test(lastname)) {
+                lastnameError.innerHTML = "Invalid Last Name";
+                isValid = false;
+            }
+
+            // Validate Email
+            if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email)) {
+                emailError.innerHTML = "Invalid Email";
+                isValid = false;
+            }
+
+            // Validate Phone Number
+            if (!/^[0-9]{10}$/.test(phone)) {
+                phoneError.innerHTML = "Invalid Phone Number";
+                isValid = false;
+            }
+
+            // Validate OTP
+            g ="1234";
+            if (otp !== g) {
+                otpError.innerHTML = "Invalid OTP. Please enter the correct OTP.";
+                isValid = false;
+            }
+
+            // Validate Password
+            if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/.test(password)) {
+                passwordError.innerHTML = "Invalid Password";
+                isValid = false;
+            }
+
+            // Validate Confirm Password
+            if (password !== confirmPassword) {
+                confirmPasswordError.innerHTML = "Passwords do not match";
+                isValid = false;
+            }
+
+            if (isValid) {
+                alert("Registration successful!");
+                // Here you can redirect the user to another page or perform other actions after successful registration
+            }
+        }
+    </script>
+</body>
+
+</html>
